@@ -12,13 +12,11 @@ https://jjyun98.github.io/main/
 
 ## 앞으로 계획
 
-Great!  You have setup your repo.  Now its time to start writing content.  Some helpful links:
+- 공부한 내용들에 대해서 올라갑니다.
 
-- [Writing Blogs With Jupyter](https://github.com/fastai/fastpages#writing-blog-posts-with-jupyter)
+- 데이터 마이닝, 시계열분석, 회귀분석, 머신러닝 예정 
 
-- [Writing Blogs With Markdown](https://github.com/fastai/fastpages#writing-blog-posts-with-markdown)
-
-- [Writing Blog Posts With Word](https://github.com/fastai/fastpages#writing-blog-posts-with-microsoft-word)
+- 향후 2년간 꾸준히 올라갑니다!
 
 - [(Optional) Preview Your Blog Locally](_fastpages_docs/DEVELOPMENT.md)
 
