@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Data handling in R | Yun’s</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Data handling in R" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://jjyun98.github.io/main/2022/07/03/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.html" />
+<meta property="og:url" content="https://jjyun98.github.io/main/2022/07/03/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.html" />
+<meta property="og:site_name" content="Yun’s" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-03T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Data handling in R" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-03T00:00:00-05:00","datePublished":"2022-07-03T00:00:00-05:00","description":"An easy to use blogging platform with support for Jupyter Notebooks.","headline":"Data handling in R","mainEntityOfPage":{"@type":"WebPage","@id":"https://jjyun98.github.io/main/2022/07/03/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.html"},"url":"https://jjyun98.github.io/main/2022/07/03/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/main/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://jjyun98.github.io/main/feed.xml" title="Yun's" /><link rel="shortcut icon" type="image/x-icon" href="/main/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/main/">Yun&#39;s</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/main/about/">About Me</a><a class="page-link" href="/main/search/">Search</a><a class="page-link" href="/main/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Data handling in R</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-07-03T00:00:00-05:00" itemprop="datePublished">
+        Jul 3, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/jjyun98/main/tree/master/_notebooks/데이터_변형.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/main/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/jjyun98/main/master?filepath=_notebooks%2F%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/main/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/jjyun98/main/blob/master/_notebooks/데이터_변형.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/main/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+          <div class="px-2">
+  <a href="https://deepnote.com/launch?url=https%3A%2F%2Fgithub.com%2Fjjyun98%2Fmain%2Fblob%2Fmaster%2F_notebooks%2F%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.ipynb" target="_blank">
+      <img class="notebook-badge-image" src="/main/assets/badges/deepnote.svg" alt="Launch in Deepnote"/>
+  </a>
+</div>
+
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/데이터_변형.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p>tag :R for data science</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;tidyverse&#39;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;nycflights13&#39;</span><span class="p">)</span> <span class="c1">#2013년 뉴욕시 출발 항공편 정보 패키지</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">flights</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td><td>UA</td><td>1545</td><td>N14228</td><td>EWR</td><td>IAH</td><td>227</td><td>1400</td><td>5</td><td>15</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td><td>UA</td><td>1714</td><td>N24211</td><td>LGA</td><td>IAH</td><td>227</td><td>1416</td><td>5</td><td>29</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td><td>AA</td><td>1141</td><td>N619AA</td><td>JFK</td><td>MIA</td><td>160</td><td>1089</td><td>5</td><td>40</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td><td>B6</td><td> 725</td><td>N804JB</td><td>JFK</td><td>BQN</td><td>183</td><td>1576</td><td>5</td><td>45</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td><td>DL</td><td> 461</td><td>N668DN</td><td>LGA</td><td>ATL</td><td>116</td><td> 762</td><td>6</td><td> 0</td><td>2013-01-01 06:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td><td>UA</td><td>1696</td><td>N39463</td><td>EWR</td><td>ORD</td><td>150</td><td> 719</td><td>5</td><td>58</td><td>2013-01-01 05:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>dttm</code>는 데이트-타임형(날짜 + 시간) 의미</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">filter</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">month</span> <span class="o">==</span> <span class="m">1</span><span class="p">,</span> <span class="n">day</span> <span class="o">==</span> <span class="m">1</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td><td>UA</td><td>1545</td><td>N14228</td><td>EWR</td><td>IAH</td><td>227</td><td>1400</td><td>5</td><td>15</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td><td>UA</td><td>1714</td><td>N24211</td><td>LGA</td><td>IAH</td><td>227</td><td>1416</td><td>5</td><td>29</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td><td>AA</td><td>1141</td><td>N619AA</td><td>JFK</td><td>MIA</td><td>160</td><td>1089</td><td>5</td><td>40</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td><td>B6</td><td> 725</td><td>N804JB</td><td>JFK</td><td>BQN</td><td>183</td><td>1576</td><td>5</td><td>45</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td><td>DL</td><td> 461</td><td>N668DN</td><td>LGA</td><td>ATL</td><td>116</td><td> 762</td><td>6</td><td> 0</td><td>2013-01-01 06:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td><td>UA</td><td>1696</td><td>N39463</td><td>EWR</td><td>ORD</td><td>150</td><td> 719</td><td>5</td><td>58</td><td>2013-01-01 05:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">near</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">2</span><span class="p">)</span> <span class="o">^</span><span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+TRUE
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">filter</span><span class="p">(</span> <span class="n">flights</span><span class="p">,</span> <span class="n">month</span> <span class="o">==</span> <span class="m">11</span> <span class="o">|</span> <span class="n">month</span> <span class="o">==</span> <span class="m">12</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>11</td><td>1</td><td>  5</td><td>2359</td><td>  6</td><td>352</td><td> 345</td><td>  7</td><td>B6</td><td> 745</td><td>N568JB</td><td>JFK</td><td>PSE</td><td>205</td><td>1617</td><td>23</td><td>59</td><td>2013-11-01 23:00:00</td></tr>
+	<tr><td>2013</td><td>11</td><td>1</td><td> 35</td><td>2250</td><td>105</td><td>123</td><td>2356</td><td> 87</td><td>B6</td><td>1816</td><td>N353JB</td><td>JFK</td><td>SYR</td><td> 36</td><td> 209</td><td>22</td><td>50</td><td>2013-11-01 22:00:00</td></tr>
+	<tr><td>2013</td><td>11</td><td>1</td><td>455</td><td> 500</td><td> -5</td><td>641</td><td> 651</td><td>-10</td><td>US</td><td>1895</td><td>N192UW</td><td>EWR</td><td>CLT</td><td> 88</td><td> 529</td><td> 5</td><td> 0</td><td>2013-11-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>11</td><td>1</td><td>539</td><td> 545</td><td> -6</td><td>856</td><td> 827</td><td> 29</td><td>UA</td><td>1714</td><td>N38727</td><td>LGA</td><td>IAH</td><td>229</td><td>1416</td><td> 5</td><td>45</td><td>2013-11-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>11</td><td>1</td><td>542</td><td> 545</td><td> -3</td><td>831</td><td> 855</td><td>-24</td><td>AA</td><td>2243</td><td>N5CLAA</td><td>JFK</td><td>MIA</td><td>147</td><td>1089</td><td> 5</td><td>45</td><td>2013-11-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>11</td><td>1</td><td>549</td><td> 600</td><td>-11</td><td>912</td><td> 923</td><td>-11</td><td>UA</td><td> 303</td><td>N595UA</td><td>JFK</td><td>SFO</td><td>359</td><td>2586</td><td> 6</td><td> 0</td><td>2013-11-01 06:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>%in%</code> : 이 안에 있는 모든 것 꺼냄</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">nov_dec</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">month</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="m">11</span><span class="p">,</span><span class="m">12</span><span class="p">))</span>
+<span class="n">nov_dec</span> <span class="o">%&gt;%</span> <span class="n">tail</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td> 855</td><td>NA</td><td>NA</td><td>1142</td><td>NA</td><td>UA</td><td>1506</td><td>NA    </td><td>EWR</td><td>JAC</td><td>NA</td><td>1874</td><td> 8</td><td>55</td><td>2013-12-31 08:00:00</td></tr>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td> 705</td><td>NA</td><td>NA</td><td> 931</td><td>NA</td><td>UA</td><td>1729</td><td>NA    </td><td>EWR</td><td>DEN</td><td>NA</td><td>1605</td><td> 7</td><td> 5</td><td>2013-12-31 07:00:00</td></tr>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td> 825</td><td>NA</td><td>NA</td><td>1029</td><td>NA</td><td>US</td><td>1831</td><td>NA    </td><td>JFK</td><td>CLT</td><td>NA</td><td> 541</td><td> 8</td><td>25</td><td>2013-12-31 08:00:00</td></tr>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td>1615</td><td>NA</td><td>NA</td><td>1800</td><td>NA</td><td>MQ</td><td>3301</td><td>N844MQ</td><td>LGA</td><td>RDU</td><td>NA</td><td> 431</td><td>16</td><td>15</td><td>2013-12-31 16:00:00</td></tr>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td> 600</td><td>NA</td><td>NA</td><td> 735</td><td>NA</td><td>UA</td><td> 219</td><td>NA    </td><td>EWR</td><td>ORD</td><td>NA</td><td> 719</td><td> 6</td><td> 0</td><td>2013-12-31 06:00:00</td></tr>
+	<tr><td>2013</td><td>12</td><td>31</td><td>NA</td><td> 830</td><td>NA</td><td>NA</td><td>1154</td><td>NA</td><td>UA</td><td> 443</td><td>NA    </td><td>JFK</td><td>LAX</td><td>NA</td><td>2475</td><td> 8</td><td>30</td><td>2013-12-31 08:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">filter</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="o">!</span><span class="p">(</span><span class="n">arr_delay</span> <span class="o">&gt;</span> <span class="m">120</span> <span class="o">|</span> <span class="n">dep_delay</span> <span class="o">&gt;</span> <span class="m">120</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td><td>UA</td><td>1545</td><td>N14228</td><td>EWR</td><td>IAH</td><td>227</td><td>1400</td><td>5</td><td>15</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td><td>UA</td><td>1714</td><td>N24211</td><td>LGA</td><td>IAH</td><td>227</td><td>1416</td><td>5</td><td>29</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td><td>AA</td><td>1141</td><td>N619AA</td><td>JFK</td><td>MIA</td><td>160</td><td>1089</td><td>5</td><td>40</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td><td>B6</td><td> 725</td><td>N804JB</td><td>JFK</td><td>BQN</td><td>183</td><td>1576</td><td>5</td><td>45</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td><td>DL</td><td> 461</td><td>N668DN</td><td>LGA</td><td>ATL</td><td>116</td><td> 762</td><td>6</td><td> 0</td><td>2013-01-01 06:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td><td>UA</td><td>1696</td><td>N39463</td><td>EWR</td><td>ORD</td><td>150</td><td> 719</td><td>5</td><td>58</td><td>2013-01-01 05:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="m">3</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 3 × 1</caption>
+<thead>
+	<tr><th scope="col">x</th></tr>
+	<tr><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td> 1</td></tr>
+	<tr><td>NA</td></tr>
+	<tr><td> 3</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span><span class="m">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 1 × 1</caption>
+<thead>
+	<tr><th scope="col">x</th></tr>
+	<tr><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>3</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>arrange</code> : <code>desc</code>와 같이 정렬할 때 사용하는 <code>filter</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">arrange</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="nf">desc</span><span class="p">(</span><span class="n">arr_delay</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td> 9</td><td> 641</td><td> 900</td><td>1301</td><td>1242</td><td>1530</td><td>1272</td><td>HA</td><td>  51</td><td>N384HA</td><td>JFK</td><td>HNL</td><td>640</td><td>4983</td><td> 9</td><td> 0</td><td>2013-01-09 09:00:00</td></tr>
+	<tr><td>2013</td><td>6</td><td>15</td><td>1432</td><td>1935</td><td>1137</td><td>1607</td><td>2120</td><td>1127</td><td>MQ</td><td>3535</td><td>N504MQ</td><td>JFK</td><td>CMH</td><td> 74</td><td> 483</td><td>19</td><td>35</td><td>2013-06-15 19:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>10</td><td>1121</td><td>1635</td><td>1126</td><td>1239</td><td>1810</td><td>1109</td><td>MQ</td><td>3695</td><td>N517MQ</td><td>EWR</td><td>ORD</td><td>111</td><td> 719</td><td>16</td><td>35</td><td>2013-01-10 16:00:00</td></tr>
+	<tr><td>2013</td><td>9</td><td>20</td><td>1139</td><td>1845</td><td>1014</td><td>1457</td><td>2210</td><td>1007</td><td>AA</td><td> 177</td><td>N338AA</td><td>JFK</td><td>SFO</td><td>354</td><td>2586</td><td>18</td><td>45</td><td>2013-09-20 18:00:00</td></tr>
+	<tr><td>2013</td><td>7</td><td>22</td><td> 845</td><td>1600</td><td>1005</td><td>1044</td><td>1815</td><td> 989</td><td>MQ</td><td>3075</td><td>N665MQ</td><td>JFK</td><td>CVG</td><td> 96</td><td> 589</td><td>16</td><td> 0</td><td>2013-07-22 16:00:00</td></tr>
+	<tr><td>2013</td><td>4</td><td>10</td><td>1100</td><td>1900</td><td> 960</td><td>1342</td><td>2211</td><td> 931</td><td>DL</td><td>2391</td><td>N959DL</td><td>JFK</td><td>TPA</td><td>139</td><td>1005</td><td>19</td><td> 0</td><td>2013-04-10 19:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">tibble</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">2</span><span class="p">,</span> <span class="kc">NA</span><span class="p">))</span>
+<span class="nf">arrange</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 3 × 1</caption>
+<thead>
+	<tr><th scope="col">x</th></tr>
+	<tr><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td> 2</td></tr>
+	<tr><td> 5</td></tr>
+	<tr><td>NA</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>select</code> : 관심 있는 열만 보기</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">select</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 3</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>:</code>  a ~ b까지</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">select</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">year</span><span class="o">:</span><span class="n">arr_delay</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 9</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">select</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">year</span><span class="o">:</span><span class="n">air_time</span><span class="p">))</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 4</caption>
+<thead>
+	<tr><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>1400</td><td>5</td><td>15</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>1416</td><td>5</td><td>29</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>1089</td><td>5</td><td>40</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>1576</td><td>5</td><td>45</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td> 762</td><td>6</td><td> 0</td><td>2013-01-01 06:00:00</td></tr>
+	<tr><td> 719</td><td>5</td><td>58</td><td>2013-01-01 05:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>-</code> 추가</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote><p><code>select()</code> 안에서 사용할 수 있는 함수들</p>
+<ul>
+<li><code>starts_with('abc')</code> :'abc'로 시작하는 이름에 매칭<br />  &gt; - <code>ends_with("xyz")</code> :'xyz'로 끝나는 이름에 매칭<br />   &gt; - <code>contains('abc')</code> :'abc'를 포함한 이름에 매칭<br />   &gt; - <code>num_range('x', 1:3)</code> : x1,x2,x3에 매칭</li>
+</ul>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>rename</code> : 변수명 변경</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">rename</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">tail_num</span> <span class="o">=</span> <span class="n">tailnum</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tail_num</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">air_time</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th><th scope="col">time_hour</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dttm&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td><td>UA</td><td>1545</td><td>N14228</td><td>EWR</td><td>IAH</td><td>227</td><td>1400</td><td>5</td><td>15</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td><td>UA</td><td>1714</td><td>N24211</td><td>LGA</td><td>IAH</td><td>227</td><td>1416</td><td>5</td><td>29</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td><td>AA</td><td>1141</td><td>N619AA</td><td>JFK</td><td>MIA</td><td>160</td><td>1089</td><td>5</td><td>40</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td><td>B6</td><td> 725</td><td>N804JB</td><td>JFK</td><td>BQN</td><td>183</td><td>1576</td><td>5</td><td>45</td><td>2013-01-01 05:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td><td>DL</td><td> 461</td><td>N668DN</td><td>LGA</td><td>ATL</td><td>116</td><td> 762</td><td>6</td><td> 0</td><td>2013-01-01 06:00:00</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td><td>UA</td><td>1696</td><td>N39463</td><td>EWR</td><td>ORD</td><td>150</td><td> 719</td><td>5</td><td>58</td><td>2013-01-01 05:00:00</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>everything</code>: 몇 개의 변수를 데이터프레임 시작 부분으로 옮기고 싶을 때 사용</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">select</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span> <span class="n">time_hour</span><span class="p">,</span> <span class="n">air_time</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 19</caption>
+<thead>
+	<tr><th scope="col">time_hour</th><th scope="col">air_time</th><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_time</th><th scope="col">sched_dep_time</th><th scope="col">dep_delay</th><th scope="col">arr_time</th><th scope="col">sched_arr_time</th><th scope="col">arr_delay</th><th scope="col">carrier</th><th scope="col">flight</th><th scope="col">tailnum</th><th scope="col">origin</th><th scope="col">dest</th><th scope="col">distance</th><th scope="col">hour</th><th scope="col">minute</th></tr>
+	<tr><th scope="col">&lt;dttm&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;chr&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013-01-01 05:00:00</td><td>227</td><td>2013</td><td>1</td><td>1</td><td>517</td><td>515</td><td> 2</td><td> 830</td><td> 819</td><td> 11</td><td>UA</td><td>1545</td><td>N14228</td><td>EWR</td><td>IAH</td><td>1400</td><td>5</td><td>15</td></tr>
+	<tr><td>2013-01-01 05:00:00</td><td>227</td><td>2013</td><td>1</td><td>1</td><td>533</td><td>529</td><td> 4</td><td> 850</td><td> 830</td><td> 20</td><td>UA</td><td>1714</td><td>N24211</td><td>LGA</td><td>IAH</td><td>1416</td><td>5</td><td>29</td></tr>
+	<tr><td>2013-01-01 05:00:00</td><td>160</td><td>2013</td><td>1</td><td>1</td><td>542</td><td>540</td><td> 2</td><td> 923</td><td> 850</td><td> 33</td><td>AA</td><td>1141</td><td>N619AA</td><td>JFK</td><td>MIA</td><td>1089</td><td>5</td><td>40</td></tr>
+	<tr><td>2013-01-01 05:00:00</td><td>183</td><td>2013</td><td>1</td><td>1</td><td>544</td><td>545</td><td>-1</td><td>1004</td><td>1022</td><td>-18</td><td>B6</td><td> 725</td><td>N804JB</td><td>JFK</td><td>BQN</td><td>1576</td><td>5</td><td>45</td></tr>
+	<tr><td>2013-01-01 06:00:00</td><td>116</td><td>2013</td><td>1</td><td>1</td><td>554</td><td>600</td><td>-6</td><td> 812</td><td> 837</td><td>-25</td><td>DL</td><td> 461</td><td>N668DN</td><td>LGA</td><td>ATL</td><td> 762</td><td>6</td><td> 0</td></tr>
+	<tr><td>2013-01-01 05:00:00</td><td>150</td><td>2013</td><td>1</td><td>1</td><td>554</td><td>558</td><td>-4</td><td> 740</td><td> 728</td><td> 12</td><td>UA</td><td>1696</td><td>N39463</td><td>EWR</td><td>ORD</td><td> 719</td><td>5</td><td>58</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">flights_sml</span> <span class="o">&lt;-</span> <span class="nf">select</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span>
+                      <span class="n">year</span><span class="o">:</span><span class="n">day</span><span class="p">,</span>
+                      <span class="nf">ends_with</span><span class="p">(</span><span class="s">&#39;delay&#39;</span><span class="p">),</span>
+                      <span class="n">distance</span><span class="p">,</span>
+                      <span class="n">air_time</span>
+                      <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>mutate</code> : 새로운 변수 데이터셋 마지막에 추가</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">mutate</span><span class="p">(</span><span class="n">flights_sml</span><span class="p">,</span>
+       <span class="n">gain</span> <span class="o">=</span> <span class="n">arr_delay</span> <span class="o">-</span> <span class="n">dep_delay</span><span class="p">,</span>
+       <span class="n">speed</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">air_time</span> <span class="o">*</span> <span class="m">60</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 9</caption>
+<thead>
+	<tr><th scope="col">year</th><th scope="col">month</th><th scope="col">day</th><th scope="col">dep_delay</th><th scope="col">arr_delay</th><th scope="col">distance</th><th scope="col">air_time</th><th scope="col">gain</th><th scope="col">speed</th></tr>
+	<tr><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;int&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>2013</td><td>1</td><td>1</td><td> 2</td><td> 11</td><td>1400</td><td>227</td><td>  9</td><td>370.0441</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td> 4</td><td> 20</td><td>1416</td><td>227</td><td> 16</td><td>374.2731</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td> 2</td><td> 33</td><td>1089</td><td>160</td><td> 31</td><td>408.3750</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>-1</td><td>-18</td><td>1576</td><td>183</td><td>-17</td><td>516.7213</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>-6</td><td>-25</td><td> 762</td><td>116</td><td>-19</td><td>394.1379</td></tr>
+	<tr><td>2013</td><td>1</td><td>1</td><td>-4</td><td> 12</td><td> 719</td><td>150</td><td> 16</td><td>287.6000</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>transmute</code> : mutate에서 새 변수만 남기기</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">transmute</span><span class="p">(</span><span class="n">flights</span><span class="p">,</span>
+          <span class="n">gain</span> <span class="o">=</span> <span class="n">arr_delay</span> <span class="o">-</span> <span class="n">dep_delay</span><span class="p">,</span>
+          <span class="n">hours</span> <span class="o">=</span> <span class="n">air_time</span> <span class="o">/</span> <span class="m">60</span><span class="p">,</span>
+          <span class="n">gain_per_hour</span> <span class="o">=</span> <span class="n">gain</span> <span class="o">/</span> <span class="n">hour</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="n">head</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table class="dataframe">
+<caption>A tibble: 6 × 3</caption>
+<thead>
+	<tr><th scope="col">gain</th><th scope="col">hours</th><th scope="col">gain_per_hour</th></tr>
+	<tr><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th><th scope="col">&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>  9</td><td>3.783333</td><td> 1.800000</td></tr>
+	<tr><td> 16</td><td>3.783333</td><td> 3.200000</td></tr>
+	<tr><td> 31</td><td>2.666667</td><td> 6.200000</td></tr>
+	<tr><td>-17</td><td>3.050000</td><td>-3.400000</td></tr>
+	<tr><td>-19</td><td>1.933333</td><td>-3.166667</td></tr>
+	<tr><td> 16</td><td>2.500000</td><td> 3.200000</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>%/%</code> : 나누고 정수만 표기<br />
+<code>%%</code> : 나머지<br />
+<code>lag</code> : 한 칸 밀기<br />
+<code>lead</code> : 한 칸 당기기</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="m">1</span><span class="o">:</span><span class="m">10</span>
+<span class="nf">lag</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nf">lead</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+&lt;ol class=list-inline&gt;<li>&lt;NA&gt;</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>&lt;/ol&gt;
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+&lt;ol class=list-inline&gt;<li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li><li>&lt;NA&gt;</li>&lt;/ol&gt;
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>cumsum</code> : 누적 합<br />
+<code>cummean</code> : 누적 평균</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+&lt;ol class=list-inline&gt;<li>1</li><li>3</li><li>6</li><li>10</li><li>15</li><li>21</li><li>28</li><li>36</li><li>45</li><li>55</li>&lt;/ol&gt;
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">cummean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+&lt;ol class=list-inline&gt;<li>1</li><li>1.5</li><li>2</li><li>2.5</li><li>3</li><li>3.5</li><li>4</li><li>4.5</li><li>5</li><li>5.5</li>&lt;/ol&gt;
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/main/2022/07/03/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%80%ED%98%95.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/main/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/main/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/main/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" target="_blank" title="fastai"><svg class="svg-icon grey"><use xlink:href="/main/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" target="_blank" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/main/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
